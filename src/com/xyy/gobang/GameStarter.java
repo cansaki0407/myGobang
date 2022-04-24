@@ -7,6 +7,7 @@ import java.awt.*;
  * @author 皮皮瑶
  * @proname
  * @data 2022/4/24- 16:39
+ * @gobang day one
  */
 public class GameStarter {
 	public static void main(String[] args) {
