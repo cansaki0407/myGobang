@@ -54,7 +54,7 @@ public class GameJframe extends JFrame implements ActionListener{
 		jMenuItem3.addActionListener(this);
 		jMenuItem4.addActionListener(this);
 		//设置指令
-		jMenuItem1.setActionCommand("第一个");
+		jMenuItem1.setActionCommand("新游戏");
 		jMenuItem2.setActionCommand("第二个");
 		jMenuItem3.setActionCommand("第三个");
 		jMenuItem4.setActionCommand("第四个");
@@ -70,6 +70,9 @@ public class GameJframe extends JFrame implements ActionListener{
 		System.out.print("点击了");
 		String command = e.getActionCommand();
 		System.out.println(command);
+		if("新游戏".equals(command)){
+			GamePanel.isInit = true;
+		}
 
 	}
 	public Font getFont(){

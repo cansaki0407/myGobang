@@ -30,7 +30,9 @@ public class GamePanel extends JPanel {
 	//落子颜色判断
 	int chessJuge = 1;
 	//游戏结束
-	boolean gameOver = false;
+	static boolean  gameOver = false;
+	//游戏开始重新运行
+	static boolean isInit = false;
 
 
 
@@ -45,6 +47,24 @@ public class GamePanel extends JPanel {
 		createPointers();
 	}
 
+	//初始化数据  等于重置
+	void init(){
+		//棋盘指示器清空
+		for (int i = 0;i<rows;i++){
+			for (int j =0;j<cols;j++){
+				pointers[i][j].setType(0);
+			}
+		}
+		System.out.println(pointers[0][0].getType());
+		//棋子集合清空
+//		for (int i = 0;i<chessList.size();i++){
+//			chessList.remove(i);
+//		}
+		chessList.clear();
+		chessJuge = 1;
+		gameOver = false;
+		repaint();
+	}
 
 
 	//绘制棋盘内容
@@ -67,6 +87,10 @@ public class GamePanel extends JPanel {
 			g.drawString("游戏结束", 300, 300);
 		}
 
+		if (isInit){
+			init();
+		}
+
 	}
 
 
@@ -82,7 +106,7 @@ public class GamePanel extends JPanel {
 				//获取鼠标的坐标
 				int x = e.getX();
 				int y = e.getY();
-				System.out.println(x+","+y);
+				//System.out.println(x+","+y);
 				Pointer pointer = null;
 				for (int i = 0; i < rows;i++){
 					for (int j = 0;j < cols;j++){
@@ -108,7 +132,7 @@ public class GamePanel extends JPanel {
 				for (int i = 0; i < rows;i++){
 					for (int j = 0;j < cols;j++){
 						pointer = pointers[i][j];
-						if(pointer.isPoint(x, y)&&pointer.getType()==0){
+						if(pointer.isPoint(x, y)&&pointer.getType()==0&&gameOver==false){
 							chess = new Chess(pointer.getX(),pointer.getY(),chessJuge);
 							chessList.add(chess);
 							pointer.setType(chessJuge);
@@ -207,202 +231,278 @@ public class GamePanel extends JPanel {
 		int k = 1;
 
 		//横向五连
-		while (pointers[i][j-k].getType()==chessJuge){
-			System.out.println("牛皮");
-			k++;
-			num++;
-			if (num == 4){
-				gameOver = true;
-				return; }
+		if(j>3){
+			while (pointers[i][j-k].getType()==chessJuge){
+				System.out.println("牛皮");
+				k++;
+				num++;
+				if (num == 4){
+					gameOver = true;
+					return; }
+			}
 		}
+
 		 num = 0;
 		 k = 1;
-		while (pointers[i][j+k].getType()==chessJuge){
-			k++;
-			num++;
-			if (num == 4){
-				gameOver = true;
-				return;
-			}
-		}
+		 if(j<11){
+			 while (pointers[i][j+k].getType()==chessJuge){
+				 k++;
+				 num++;
+				 if (num == 4){
+					 gameOver = true;
+					 return;
+				 }
+			 }
+		 }
+
 		num = 0;
 		k = 1;
-		while (pointers[i][j-k].getType()==chessJuge&&pointers[i][j+k].getType()==chessJuge){
-			k++;
-			num++;
-			if (num == 2){
-				gameOver = true;
-				return;
+		if(j>1&&j<13){
+			while (pointers[i][j-k].getType()==chessJuge&&pointers[i][j+k].getType()==chessJuge){
+				k++;
+				num++;
+				if (num == 2){
+					gameOver = true;
+					return;
+				}
 			}
 		}
+
 		num = 0;
 		k = 1;
-		while (pointers[i][j-k].getType()==chessJuge){
-			k++;
-			if (k==3&&pointers[i][j+1].getType()==chessJuge){
-				gameOver = true;
-				return;
+		if(j>2&&j<14){
+			while (pointers[i][j-k].getType()==chessJuge){
+				k++;
+				if (k==4&&pointers[i][j+1].getType()==chessJuge){
+					gameOver = true;
+					return;
+				}else if(k==4){
+					return;
+				}
 			}
 		}
+
 		num = 0;
 		k = 1;
-		while (pointers[i][j+k].getType()==chessJuge){
-			k++;
-			if (k==3&&pointers[i][j-1].getType()==chessJuge){
-				gameOver = true;
-				return;
+		if(j<12&&j>0){
+			while (pointers[i][j+k].getType()==chessJuge){
+				k++;
+				if (k==4&&pointers[i][j-1].getType()==chessJuge){
+					gameOver = true;
+					return;
+				}else if(k==4){
+					return;
+				}
 			}
 		}
+
 
 		//纵向五连
 		num = 0;
 		k = 1;
-		while (pointers[i-k][j].getType()==chessJuge){
-			System.out.println("牛皮");
-			k++;
-			num++;
-			if (num == 4){
-				gameOver = true;
-				return; }
-		}
-		num = 0;
-		k = 1;
-		while (pointers[i+k][j].getType()==chessJuge){
-			k++;
-			num++;
-			if (num == 4){
-				gameOver = true;
-				return;
+		if(i>3){
+			while (pointers[i-k][j].getType()==chessJuge){
+				System.out.println("牛皮");
+				k++;
+				num++;
+				if (num == 4){
+					gameOver = true;
+					return; }
 			}
 		}
+
 		num = 0;
 		k = 1;
-		while (pointers[i-k][j].getType()==chessJuge&&pointers[i+k][j].getType()==chessJuge){
-			k++;
-			num++;
-			if (num == 2){
-				gameOver = true;
-				return;
+		if(i<11){
+			while (pointers[i+k][j].getType()==chessJuge){
+				k++;
+				num++;
+				if (num == 4){
+					gameOver = true;
+					return;
+				}
 			}
 		}
+
 		num = 0;
 		k = 1;
-		while (pointers[i-k][j].getType()==chessJuge){
-			k++;
-			if (k==3&&pointers[i+1][j].getType()==chessJuge){
-				gameOver = true;
-				return;
+		if(i>1&&i<13){
+			while (pointers[i-k][j].getType()==chessJuge&&pointers[i+k][j].getType()==chessJuge){
+				k++;
+				num++;
+				if (num == 2){
+					gameOver = true;
+					return;
+				}
 			}
 		}
+
 		num = 0;
 		k = 1;
-		while (pointers[i+k][j].getType()==chessJuge){
-			k++;
-			if (k==3&&pointers[i-1][j].getType()==chessJuge){
-				gameOver = true;
-				return;
+		if(i>2&&i<14){
+			while (pointers[i-k][j].getType()==chessJuge){
+				k++;
+				if (k==4&&pointers[i+1][j].getType()==chessJuge){
+					gameOver = true;
+					return;
+				}else if(k==4){
+					return;
+				}
 			}
 		}
+
+		num = 0;
+		k = 1;
+		if(i<12&&i>0){
+			while (pointers[i+k][j].getType()==chessJuge){
+				k++;
+				if (k==4&&pointers[i-1][j].getType()==chessJuge){
+					gameOver = true;
+					return;
+				}else if(k==4){
+					return;
+				}
+			}
+		}
+
 
 		//左对角五连
 		num = 0;
 		k = 1;
-		while (pointers[i-k][j-k].getType()==chessJuge){
-			System.out.println("牛皮");
-			k++;
-			num++;
-			if (num == 4){
-				gameOver = true;
-				return; }
-		}
-		num = 0;
-		k = 1;
-		while (pointers[i+k][j+k].getType()==chessJuge){
-			k++;
-			num++;
-			if (num == 4){
-				gameOver = true;
-				return;
+		if(i>3&&j>3){
+			while (pointers[i-k][j-k].getType()==chessJuge){
+				System.out.println("牛皮");
+				k++;
+				num++;
+				if (num == 4){
+					gameOver = true;
+					return; }
 			}
 		}
+
 		num = 0;
 		k = 1;
-		while (pointers[i-k][j-k].getType()==chessJuge&&pointers[i+k][j+k].getType()==chessJuge){
-			k++;
-			num++;
-			if (num == 2){
-				gameOver = true;
-				return;
+		if(i<11&&j<11){
+			while (pointers[i+k][j+k].getType()==chessJuge){
+				k++;
+				num++;
+				if (num == 4){
+					gameOver = true;
+					return;
+				}
 			}
 		}
+
 		num = 0;
 		k = 1;
-		while (pointers[i-k][j-k].getType()==chessJuge){
-			k++;
-			if (k==3&&pointers[i+1][j+1].getType()==chessJuge){
-				gameOver = true;
-				return;
+		if(i>1&&i<13&&j>1&&j<13){
+			while (pointers[i-k][j-k].getType()==chessJuge&&pointers[i+k][j+k].getType()==chessJuge){
+				k++;
+				num++;
+				if (num == 2){
+					gameOver = true;
+					return;
+				}
 			}
 		}
+
 		num = 0;
 		k = 1;
-		while (pointers[i+k][j+k].getType()==chessJuge){
-			k++;
-			if (k==3&&pointers[i-1][j-1].getType()==chessJuge){
-				gameOver = true;
-				return;
+		if(i>2&&j>2&&i<14&&j<14){
+			while (pointers[i-k][j-k].getType()==chessJuge){
+				k++;
+				if (k==4&&pointers[i+1][j+1].getType()==chessJuge){
+					gameOver = true;
+					return;
+				}else if(k==4){
+					return;
+				}
 			}
 		}
+
+		num = 0;
+		k = 1;
+		if(i<12&&j<12&&i>0&&j>0){
+			while (pointers[i+k][j+k].getType()==chessJuge){
+				k++;
+				if (k==4&&pointers[i-1][j-1].getType()==chessJuge){
+					gameOver = true;
+					return;
+				}else if(k==4){
+					return;
+				}
+			}
+		}
+
 
 		//右对角五连
 		num = 0;
 		k = 1;
-		while (pointers[i+k][j-k].getType()==chessJuge){
-			System.out.println("牛皮");
-			k++;
-			num++;
-			if (num == 4){
-				gameOver = true;
-				return; }
-		}
-		num = 0;
-		k = 1;
-		while (pointers[i-k][j+k].getType()==chessJuge){
-			k++;
-			num++;
-			if (num == 4){
-				gameOver = true;
-				return;
+		if(i<11&&j>3){
+			while (pointers[i+k][j-k].getType()==chessJuge){
+				System.out.println("牛皮");
+				k++;
+				num++;
+				if (num == 4){
+					gameOver = true;
+					return; }
 			}
 		}
+
 		num = 0;
 		k = 1;
-		while (pointers[i-k][j+k].getType()==chessJuge&&pointers[i+k][j-k].getType()==chessJuge){
-			k++;
-			num++;
-			if (num == 2){
-				gameOver = true;
-				return;
+		if(i>3&&j<11){
+			while (pointers[i-k][j+k].getType()==chessJuge){
+				k++;
+				num++;
+				if (num == 4){
+					gameOver = true;
+					return;
+				}
 			}
 		}
+
 		num = 0;
 		k = 1;
-		while (pointers[i-k][j+k].getType()==chessJuge){
-			k++;
-			if (k==3&&pointers[i+1][j-1].getType()==chessJuge){
-				gameOver = true;
-				return;
+		if(i>1&&i<13&&j>1&&j<13){
+			while (pointers[i-k][j+k].getType()==chessJuge&&pointers[i+k][j-k].getType()==chessJuge){
+				k++;
+				num++;
+				if (num == 2){
+					gameOver = true;
+					return;
+				}
 			}
 		}
+
 		num = 0;
 		k = 1;
-		while (pointers[i+k][j-k].getType()==chessJuge){
-			k++;
-			if (k==3&&pointers[i-1][j+1].getType()==chessJuge){
-				gameOver = true;
-				return;
+		if(i>2&&j<12&&i<12&&j>2){
+			while (pointers[i-k][j+k].getType()==chessJuge){
+				k++;
+				if (k==4&&pointers[i+1][j-1].getType()==chessJuge){
+					gameOver = true;
+					return;
+				}else if(k==4){
+					return;
+				}
 			}
 		}
+
+		num = 0;
+		k = 1;
+		if(i<12&&j>2&&i>0&&j<14){
+			while (pointers[i+k][j-k].getType()==chessJuge){
+				k++;
+				if (k==4&&pointers[i-1][j+1].getType()==chessJuge){
+					gameOver = true;
+					return;
+				}else if(k==4){
+					return;
+				}
+			}
+		}
+
 
 	}
 
